@@ -3,6 +3,7 @@ module test
 go 1.21.1
 
 require (
+	github.com/fsnotify/fsnotify v1.8.0
 	github.com/hajimehoshi/ebiten/v2 v2.7.7
 	github.com/traefik/yaegi v0.16.1
 )

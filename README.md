@@ -2,7 +2,7 @@
 
 ## How to use
 
-Run the project 
+Run the project
 
 `go run .`
 
@@ -25,7 +25,7 @@ func DrawDebugString(screen *ebiten.Image) {
 }
 ```
 
-After saving press R in game and you will see you updated text. 
+After saving press `R` in game and you will see you updated text.
 
  ## Demo
 

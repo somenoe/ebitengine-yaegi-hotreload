@@ -5,6 +5,7 @@ import (
 	"os"
 	"test/symbols"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
@@ -69,6 +70,34 @@ func reloadScripts() {
 	drawDebugString = v.Interface().(func(*ebiten.Image))
 }
 
+func watchFileChanges() {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer watcher.Close()
+
+	err = watcher.Add("src/debug.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("watching src/debug.go")
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				log.Println("exiting")
+				return
+			}
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				log.Println("src/debug.go changed, reloading")
+				reloadScripts()
+			}
+		}
+	}
+}
+
 func main() {
 	// Create the game instance
 	game := &Game{
@@ -85,4 +114,6 @@ func main() {
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
 	}
+
+	watchFileChanges()
 }

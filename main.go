@@ -111,9 +111,10 @@ func main() {
 	ebiten.SetWindowTitle("Ebiten with Yaegi")
 
 	// Run the game
+	go watchFileChanges()
+
+	// Run the game
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
 	}
-
-	watchFileChanges()
 }
